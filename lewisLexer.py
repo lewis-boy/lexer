@@ -67,7 +67,7 @@ def main():
             if char in tokenDict:
 
                 #char is one of these (+,-,<,>,=,&,|), so we need to check the next character to test whether it's + or ++ for example
-                if char == '+' or char == '-' or char == '<' or char == '>' or char == '=' or char == '&' or char == '|':
+                if char == '+' or char == '-' or char == '<' or char == '>' or char == '=' or char == '&' or char == '|' or char == '/':
 
                     #we will read next character and save the current file index to come back to it if its a single character operator 
                     currentIndex = textFile.tell()
@@ -79,7 +79,12 @@ def main():
                         (char == '=' and nextChar == '=') or (char == '&' and nextChar == '&') or \
                         (char == '|' and nextChar == '|'):
                         print(tokenDict.get(char+nextChar), end=' ')
-
+                    elif char == '/' and nextChar == '/':
+                        while char != '\n':
+                            currentIndex = textFile.tell()
+                            char = textFile.read(1)
+                        print("comment", end=' ')
+                        textFile.seek(currentIndex)
                     #it is a single character operator, so revert the file pointer and print entry of the single character operator
                     else:
                         textFile.seek(currentIndex)
@@ -91,7 +96,14 @@ def main():
 
             #char is actually a digit
             elif char.isdigit():
-                print(char, end=' ')
+                digitBuilder = []
+                while char.isdigit():
+                    currentIndex = textFile.tell()
+                    digitBuilder.append(char)
+                    char = textFile.read(1)
+                entireNumber = "".join(digitBuilder)
+                print("number", end=' ')
+                textFile.seek(currentIndex)
 
             #char is a letter, so we should build a string as long as we keep reading letters or digits
             elif char.isalpha():
