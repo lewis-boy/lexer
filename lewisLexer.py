@@ -49,6 +49,7 @@ def main():
             'void': 'void'
         }
     tokenDict = buildDict()
+    symbols = ['+','-','*','/','<','>','&','|','=']
 
     with open('case.txt', 'r') as textFile:
         while True:
@@ -67,17 +68,14 @@ def main():
             if char in tokenDict:
 
                 #char is one of these (+,-,<,>,=,&,|), so we need to check the next character to test whether it's + or ++ for example
-                if char == '+' or char == '-' or char == '<' or char == '>' or char == '=' or char == '&' or char == '|' or char == '/':
+                if char in symbols:
 
                     #we will read next character and save the current file index to come back to it if its a single character operator 
                     currentIndex = textFile.tell()
                     nextChar = textFile.read(1)
 
                     #it is a double character operator, so just print entry from tokendict
-                    if (char == '+' and nextChar == '+') or (char == '-' and nextChar == '-') or \
-                        (char == '<' and nextChar == '=') or (char == '>' and nextChar == '=') or \
-                        (char == '=' and nextChar == '=') or (char == '&' and nextChar == '&') or \
-                        (char == '|' and nextChar == '|'):
+                    if (char+nextChar) in tokenDict:
                         print(tokenDict.get(char+nextChar), end=' ')
                     elif char == '/' and nextChar == '/':
                         while char != '\n':
