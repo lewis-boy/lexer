@@ -128,9 +128,14 @@ def main():
                 #bring the file pointer back 1 so we don't skip a character
                 textFile.seek(currentIndex)
                 
-            #just a random else 
+            #most likely new line
             else:
                 print(char, end=' ')
+                if char == '\n':
+                    while char == '\n':
+                        currentIndex = textFile.tell()
+                        char = textFile.read(1)
+                    textFile.seek(currentIndex)
 
     # while True:
     #     lexeme = input("Lexeme: ")
